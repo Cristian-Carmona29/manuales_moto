@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Repositorio de Manuales de Moto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --surface:   #1a1d27;
+      --card:      #21253a;
+      --border:    #2e3350;
+      --accent:    #f0a500;
+      --accent2:   #e05c00;
+      --text:      #e8eaf0;
+      --muted:     #7a7f9a;
+      --radius:    10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f1117 60%, #1a1225 100%);
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .login-box .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .login-box .logo span { color: var(--text); }
+
+    .login-box p {
+      color: var(--muted);
+      margin: 10px 0 32px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Barlow', sans-serif;
+      margin-bottom: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .login-box input:focus { border-color: var(--accent); }
+
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border: none;
+      border-radius: var(--radius);
+      color: #0f1117;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+
+    .login-box button:hover { opacity: .88; }
+
+    .login-error {
+      color: #e05c5c;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ── APP ── */
+    #app { display: none; }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--accent);
+    }
+
+    .header-logo span { color: var(--text); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      padding: 9px 16px 9px 38px;
+      width: 260px;
+      outline: none;
+      transition: border-color .2s, width .3s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      width: 320px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    .btn-logout {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+
+    .btn-logout:hover { border-color: #e05c5c; color: #e05c5c; }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── SEARCH RESULTS ── */
+    #search-results {
+      display: none;
+      margin-bottom: 40px;
+    }
+
+    #search-results .result-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, background .2s;
+    }
+
+    #search-results .result-item:hover {
+      border-color: var(--accent);
+      background: #252a40;
+    }
+
+    #search-results .result-brand {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    #search-results .result-name {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* ── BRAND CARDS (grid de marcas) ── */
+    #brands-view {}
+
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 48px;
+    }
+
+    .brand-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: border-color .2s, transform .15s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .25s;
+    }
+
+    .brand-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .brand-card:hover::before { transform: scaleX(1); }
+
+    .brand-icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+
+    .brand-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+
+    .brand-count {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── BRAND DETAIL ── */
+    #brand-view { display: none; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      padding: 8px 16px;
+      cursor: pointer;
+      margin-bottom: 28px;
+      transition: border-color .2s, color .2s;
+    }
+
+    .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .brand-header-icon { font-size: 48px; }
+
+    .brand-header-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .brand-header-name span {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    /* ── MANUAL LIST ── */
+    .manual-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .manual-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, background .2s;
+      gap: 16px;
+    }
+
+    .manual-item:hover { border-color: var(--accent); background: #252a40; }
+
+    .manual-item-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .manual-pdf-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .manual-name {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .manual-type {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .manual-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-view, .btn-download {
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+
+    .btn-view {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-view:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-download {
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border: none;
+      color: #0f1117;
+    }
+
+    .btn-download:hover { opacity: .85; }
+
+    /* ── PDF VIEWER ── */
+    #pdf-view { display: none; }
+
+    .pdf-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pdf-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 80vh;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    /* ── NO RESULTS ── */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .no-results svg { margin-bottom: 16px; opacity: .4; }
+    .no-results p { font-size: 16px; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      .search-wrap input { width: 180px; }
+      .search-wrap input:focus { width: 200px; }
+      .manual-item { flex-direction: column; align-items: flex-start; }
+      .manual-actions { width: 100%; }
+      .btn-view, .btn-download { flex: 1; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logo">MOTO<span>DOCS</span></div>
+    <p>Repositorio de Manuales</p>
+    <input type="text" id="login-user" placeholder="Usuario" autocomplete="off"/>
+    <input type="password" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter') doLogin()"/>
+    <button onclick="doLogin()">🔑 &nbsp;Ingresar</button>
+    <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
+  </div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="app">
+
+  <header>
+    <div class="header-logo">MOTO<span>DOCS</span></div>
+    <div class="header-right">
+      <div class="search-wrap">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Buscar manual..." oninput="doSearch(this.value)"/>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Resultados de búsqueda -->
+    <div id="search-results">
+      <div class="section-title">Resultados de búsqueda</div>
+      <div id="search-list"></div>
+    </div>
+
+    <!-- Vista: todas las marcas -->
+    <div id="brands-view">
+      <div class="section-title">Marcas disponibles</div>
+      <div class="brands-grid" id="brands-grid"></div>
+    </div>
+
+    <!-- Vista: manuales de una marca -->
+    <div id="brand-view">
+      <button class="back-btn" onclick="showBrands()">
+        ← Volver a marcas
+      </button>
+      <div class="brand-header">
+        <div class="brand-header-icon" id="bv-icon"></div>
+        <div>
+          <div class="brand-header-name">
+            <span>Manuales</span>
+            <span id="bv-name"></span>
+          </div>
+        </div>
+      </div>
+      <div class="section-title" id="bv-count"></div>
+      <div class="manual-list" id="manual-list"></div>
+    </div>
+
+    <!-- Vista: PDF embebido -->
+    <div id="pdf-view">
+      <div class="pdf-header">
+        <div>
+          <button class="back-btn" id="pdf-back-btn" onclick="closePdf()">← Volver</button>
+          <div class="pdf-title" id="pdf-title"></div>
+        </div>
+        <a class="btn-download" id="pdf-download-btn" download>⬇ Descargar</a>
+      </div>
+      <iframe class="pdf-frame" id="pdf-frame" src=""></iframe>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  USUARIOS  —  agrega o quita los que necesites
+// ══════════════════════════════════════════
+const USERS = {
+  'cristian': '12345',
+  'johan':    '12345',
+  'leandro':  '12345',
+  'wilman':   '12345',
+  'tique':    '12345',
+  'manuel':   '12345',
+};
+
+// ══════════════════════════════════════════
+//  DATOS — MARCAS Y MANUALES
+//  Para agregar un manual: copia un objeto { name, file, type }
+//  "file" es la ruta relativa al PDF desde index.html
+//  Ej: file: 'AKT/AKT AK125 DYNAMIC MANUAL TALLER.pdf'
+// ══════════════════════════════════════════
+const DATA = [
+  {
+    id: 'akt',
+    name: 'AKT',
+    icon: '🏍️',
+    manuales: [
+      { name: 'AK125 Dynamic – Manual de Taller',   file: 'AKT/AKT AK125 DYNAMIC MANUAL TALLER.pdf',  type: 'Manual de Taller' },
+      // Agrega más manuales AKT aquí:
+      // { name: 'NKD 125 – Manual de Usuario', file: 'AKT/AKT NKD125 MANUAL USUARIO.pdf', type: 'Manual de Usuario' },
+    ]
+  },
+  {
+    id: 'aprilia',
+    name: 'APRILIA',
+    icon: '🏁',
+    manuales: [
+      // Pega aquí los manuales de Aprilia
+      // { name: 'RS 125 – Manual de Taller', file: 'APRILIA/APRILIA RS125 TALLER.pdf', type: 'Manual de Taller' },
+    ]
+  },
+  {
+    id: 'bajaj',
+    name: 'BAJAJ',
+    icon: '⚙️',
+    manuales: [
+      // Pega aquí los manuales de Bajaj
+      // { name: 'Pulsar 200 NS – Manual de Taller', file: 'BAJAJ/BAJAJ PULSAR 200NS TALLER.pdf', type: 'Manual de Taller' },
+    ]
+  },
+];
+
+// ══════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  if (USERS[user] && USERS[user] === pass) {
+    sessionStorage.setItem('motodocs_auth', user);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('motodocs_auth');
+  location.reload();
+}
+
+// Auto-login si ya hay sesión
+if (sessionStorage.getItem('motodocs_auth')) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  initApp();
+}
+
+// ══════════════════════════════════════════
+//  APP
+// ══════════════════════════════════════════
+let currentBrand = null;
+
+function initApp() {
+  renderBrandsGrid();
+  showBrands();
+}
+
+function renderBrandsGrid() {
+  const grid = document.getElementById('brands-grid');
+  grid.innerHTML = DATA.map(b => `
+    <div class="brand-card" onclick="showBrand('${b.id}')">
+      <div class="brand-icon">${b.icon}</div>
+      <div class="brand-name">${b.name}</div>
+      <div class="brand-count">${b.manuales.length} manual${b.manuales.length !== 1 ? 'es' : ''}</div>
+    </div>
+  `).join('');
+}
+
+function showBrands() {
+  hide('search-results');
+  show('brands-view');
+  hide('brand-view');
+  hide('pdf-view');
+  document.getElementById('search-input').value = '';
+  currentBrand = null;
+}
+
+function showBrand(id) {
+  const brand = DATA.find(b => b.id === id);
+  if (!brand) return;
+  currentBrand = brand;
+  hide('brands-view');
+  hide('search-results');
+  hide('pdf-view');
+  show('brand-view');
+  document.getElementById('bv-icon').textContent = brand.icon;
+  document.getElementById('bv-name').textContent = brand.name;
+  document.getElementById('bv-count').textContent =
+    brand.manuales.length + ' manual' + (brand.manuales.length !== 1 ? 'es' : '');
+  renderManualList(brand.manuales, brand);
+}
+
+function renderManualList(manuales, brand) {
+  const list = document.getElementById('manual-list');
+  if (!manuales.length) {
+    list.innerHTML = `<div class="no-results">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <p>No hay manuales aún para esta marca.</p>
+    </div>`;
+    return;
+  }
+  list.innerHTML = manuales.map((m, i) => `
+    <div class="manual-item">
+      <div class="manual-item-left">
+        <div class="manual-pdf-icon">📄</div>
+        <div>
+          <div class="manual-name">${m.name}</div>
+          <div class="manual-type">${m.type}</div>
+        </div>
+      </div>
+      <div class="manual-actions">
+        <button class="btn-view" onclick="openPdf('${m.file}','${escAttr(m.name)}','${brand ? brand.id : ''}')">👁 Ver</button>
+        <a class="btn-download" href="${m.file}" download>⬇ Descargar</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openPdf(file, name, brandId) {
+  hide('brands-view');
+  hide('brand-view');
+  hide('search-results');
+  show('pdf-view');
+  document.getElementById('pdf-title').textContent = name;
+  document.getElementById('pdf-frame').src = file;
+  document.getElementById('pdf-download-btn').href = file;
+  document.getElementById('pdf-download-btn').setAttribute('download', '');
+  // El botón back sabe a dónde volver
+  document.getElementById('pdf-back-btn').onclick = brandId
+    ? () => showBrand(brandId)
+    : () => showBrands();
+}
+
+function closePdf() {
+  document.getElementById('pdf-frame').src = '';
+  if (currentBrand) showBrand(currentBrand.id);
+  else showBrands();
+}
+
+// ══════════════════════════════════════════
+//  BÚSQUEDA
+// ══════════════════════════════════════════
+function doSearch(q) {
+  q = q.trim().toLowerCase();
+  if (!q) {
+    hide('search-results');
+    if (currentBrand) show('brand-view');
+    else show('brands-view');
+    return;
+  }
+  hide('brands-view');
+  hide('brand-view');
+  hide('pdf-view');
+  show('search-results');
+
+  const results = [];
+  DATA.forEach(brand => {
+    brand.manuales.forEach(m => {
+      if (m.name.toLowerCase().includes(q) || brand.name.toLowerCase().includes(q)) {
+        results.push({ brand, manual: m });
+      }
+    });
+  });
+
+  const list = document.getElementById('search-list');
+  if (!results.length) {
+    list.innerHTML = `<div class="no-results">
+      <p>No se encontraron manuales para "<strong>${q}</strong>"</p>
+    </div>`;
+    return;
+  }
+  list.innerHTML = results.map(r => `
+    <div class="result-item" style="cursor:pointer" onclick="openPdf('${r.manual.file}','${escAttr(r.manual.name)}','${r.brand.id}')">
+      <div class="manual-pdf-icon" style="width:36px;height:36px;background:linear-gradient(135deg,#e05c00,#f0a500);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📄</div>
+      <div>
+        <div class="result-brand">${r.brand.icon} ${r.brand.name}</div>
+        <div class="result-name">${r.manual.name}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function show(id) { document.getElementById(id).style.display = ''; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function escAttr(s) { return s.replace(/'/g, "\\'"); }
+</script>
+</body>
+</html>
